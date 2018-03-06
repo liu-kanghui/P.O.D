@@ -4,10 +4,10 @@
 import sys
 from PyQt5.QtWidgets import QMainWindow, QApplication
 from PyQt5 import uic
-from light import Lights
+from Light import Lights
+import DetectDevice
 
-
-# this script is the pod application
+''' this script is the pod application'''
 
 Ui_MainWindow, QtBaseClass = uic.loadUiType("pod.ui")
 
@@ -17,11 +17,17 @@ class MyApp(QMainWindow):
         super(MyApp, self).__init__()
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
+        connectedDevicesIP = DetectDevice.arpScan()
+        # assign all the pod to control light as hard on and off.
+        # just for now testing.
+        for ip in connectedDevicesIP:
+            lightPattern = Lights(ip)
+            lightPattern.hardOnOffLED(1, 1, 120)
         self.ui.calc_tax_button.clicked.connect(self.CalculateTax)
 
     def CalculateTax(self):
         L = Lights()
-        for i in range(0, 255):
+        for i in range(100, 255):
             L.runLights(i)
         price = int(self.ui.price_box.toPlainText())
         tax = (self.ui.tax_rate.value())
