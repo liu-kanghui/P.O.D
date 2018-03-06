@@ -1,0 +1,39 @@
+Finished:
+1. partly light api
+2. detect available raspberry ipv4
+
+
+
+
+TODO: 
+1. create a mysql database scheme 
+
+pod
+=====================================
+ipv4   podname  groupname
+ipv4   podname  groupname
+==============================
+
+group
+==================================
+groupname light water phototime 
+groupname light water phototime
+===================================
+
+
+2. light brightness lux, and input function 
+
+3. complete light sensor api
+
+4. water sensor api
+
+5. camera api
+
+6. write data and retrive data from database.
+
+7. name raspberry pi device with its own pod number 
+   like  raspberry-1
+
+8. photo storage
+
+9. data display
