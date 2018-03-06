@@ -11,11 +11,19 @@ self automate plant monitoring system
 
 ## Environment requirement for mini(pi zero):
 1. pi@raspberrypi:~$ sudo apt update
-2. pi@raspberrypi:~$ sudo apt install python3-gpiozero
-3. enable ssh, and GPIO remote for raspberry pi
+2. pi@raspberrypi:~$ sudo apt upgrade
+3. pi@raspberrypi:~$ sudo apt install python3-gpiozero
+4. enable ssh, and GPIO remote for raspberry pi
 
 
 ## Environment requirement for center(pi 3):
+arp-scan: for getting the address of devices under the same network
+qt: for frontend
+
+
+1. pi@raspberrypi:~$ sudo apt update
+2. pi@raspberrypi:~$ sudo apt upgrade
+3. pi@raspberrypi:~$ sudo apt-get install arp-scan
 1. sudo apt-get install qt5-default qt5-designer qt5-doc qt5-dev-tools python-qt5
 
 ## Circuit:
