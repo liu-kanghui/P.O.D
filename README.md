@@ -1,3 +1,12 @@
+## It is python3 not python2
+## Always do git pull, in order to minimise possible conflicts.
+## Please follow good coding style. 
+1. good comment, meaningful variable name
+2. no line longer than 80
+3. if using sublime. highly recommend anaconda pacakge. 
+   it has autocomplete and code linting.
+
+
 # P.O.D
 self automate plant monitoring system
 
