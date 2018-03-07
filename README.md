@@ -15,9 +15,6 @@ self automate plant monitoring system
 3. Run app.py from the main controller machine. 
 
 
-## Language: python3
-## UI: PyQt 5 
-
 ## Environment requirement for mini(pi zero):
 1. pi@raspberrypi:~$ sudo apt update
 2. pi@raspberrypi:~$ sudo apt upgrade
@@ -33,7 +30,9 @@ qt: for frontend
 1. pi@raspberrypi:~$ sudo apt update
 2. pi@raspberrypi:~$ sudo apt upgrade
 3. pi@raspberrypi:~$ sudo apt-get install arp-scan
-1. sudo apt-get install qt5-default qt5-designer qt5-doc qt5-dev-tools python-qt5
+4. pi@raspberrypi:~$ sudo apt-get install qt5-default qt5-designer qt5-doc qt5-dev-tools python-qt5
+5. pi@raspberrypi:~$ sudo apt-get install sqlitebroswer
+
 
 ## Circuit:
 1. LED light pins  BMP 18, 19, 20, 21, 22, 23, 24, 25
