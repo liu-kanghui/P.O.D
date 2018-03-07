@@ -17,23 +17,24 @@ class MyApp(QMainWindow):
         super(MyApp, self).__init__()
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
-        connectedDevicesIP = DetectDevice.arpScan()
-        # assign all the pod to control light as hard on and off.
-        # just for now testing.
-        for ip in connectedDevicesIP:
-            lightPattern = Lights(ip)
-            lightPattern.hardOnOffLED(1, 1, 120)
         self.ui.calc_tax_button.clicked.connect(self.CalculateTax)
+        self.ui.light_button.clicked.connect(self.TurnOnLight)
 
     def CalculateTax(self):
-        L = Lights()
-        for i in range(100, 255):
-            L.runLights(i)
         price = int(self.ui.price_box.toPlainText())
         tax = (self.ui.tax_rate.value())
         total_price = price + ((tax / 100) * price)
         total_price_string = "The total price with tax is: " + str(total_price)
         self.ui.results_window.setText(total_price_string)
+
+    def TurnOnLight(self):
+        connectedpiZeroHostDict = DetectDevice.arpScan()
+        # assign all the pod to control light as hard on and off.
+        # just for now testing.
+        for name, host in connectedpiZeroHostDict.items():
+            print(host)
+            lightPattern = Lights(host)
+            lightPattern.hardOnOffLED(1, 1, 120)
 
 
 if __name__ == "__main__":

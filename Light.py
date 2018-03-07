@@ -5,6 +5,7 @@ from gpiozero import LEDBoard
 from gpiozero.pins.pigpio import PiGPIOFactory
 import sys
 
+
 '''
 This contains a Lights object, can assign patterns to the lighting
 
@@ -61,5 +62,3 @@ class Lights():
         print("active led")
         print(leds)
         return leds
-
-
