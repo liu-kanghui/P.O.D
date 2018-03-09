@@ -7,6 +7,9 @@
    it has autocomplete and code linting.
 
 
+##How to run 
+on main pi, cd NewPod, run python3 App.py
+
 # P.O.D
 self automate plant monitoring system
 

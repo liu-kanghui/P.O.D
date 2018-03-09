@@ -42,3 +42,6 @@ def validateIPV4(address):
         socket.inet_aton(address)
     except socket.error:
         print(address + "sorry the addr is not valid ip v4 address")
+
+
+arpScan()
