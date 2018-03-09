@@ -1,0 +1,9 @@
+setup.py
+tsl2591/__init__.py
+tsl2591/read_tsl.py
+tsl2591.egg-info/PKG-INFO
+tsl2591.egg-info/SOURCES.txt
+tsl2591.egg-info/dependency_links.txt
+tsl2591.egg-info/not-zip-safe
+tsl2591.egg-info/requires.txt
+tsl2591.egg-info/top_level.txt
