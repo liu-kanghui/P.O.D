@@ -12,5 +12,10 @@ podName_mac_dict = {}
 for i in range(len(podNames)):
     podName_mac_dict[piMacAddress[i]] = podNames[i]
 
+# Experiment parameters
+experiment_length = 60  # duration of experiment in seconds
+
+# Camera Variables
+camera_delay = 5  # seconds between pictures
 
 sqlite_file = 'db.sqlite'

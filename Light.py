@@ -4,6 +4,9 @@ from time import sleep
 from gpiozero import LEDBoard
 from gpiozero.pins.pigpio import PiGPIOFactory
 import sys
+from bisect import bisect_left, bisect_right
+import tsl2591
+
 
 
 '''
@@ -19,15 +22,21 @@ Parameter: hostIP
 
 
 class Lights():
-
+    #add csv file as parameter
     def __init__(self, hostIP):
         ''' initialize the hostIP and leds GPIO pins'''
+        #self.lightVals, self.lightDelay = Read_Two_Column_File(file)
+        self.sensor = tsl2591.Tsl2591()
+        if (self.sensor is None):
+          raise LightSensorException(0)
         self.hostIP = hostIP    # host is the one that controls the lights
         self.factory = PiGPIOFactory(host=hostIP)
         # 18, 19, 20, 21, 22, 23, 24, 25 are the connected GPIO pins
         self.leds = LEDBoard(18, 19, 20, 21, 22, 23, 24, 25,
                              pwm=True, pin_factory=self.factory)
-
+        #array for lux values at given power level (index)
+        self.calibrateArr = []
+        calibrate()
     def adjustableLED(self, brightness):
         ''' adjust LED intensity according to brightness assigned'''
         leds = self.processBrightness(brightness)
