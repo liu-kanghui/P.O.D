@@ -10,7 +10,7 @@ import config
 """The device name must contains 'Raspberry'"""
 
 
-def arpScan():
+def arp_scan():
     """Return a list of IPV4 addresses of detected Raspberry devices"""
     pwd = 'raspberry'   # password for sudo
     # -l : localhosts
@@ -28,7 +28,7 @@ def arpScan():
             macAddress = eachLine[1]   # grab the mac address
             host = eachLine[0]         # grab the host
             if macAddress in config.piMacAddress:
-                validateIPV4(host)     # maybe don't need to validate
+                validate_IPV4(host)     # maybe don't need to validate
                 print(macAddress)
                 piZeroHost[config.podName_mac_dict.get(macAddress)] = host
     print("podname  and its host")
@@ -36,7 +36,7 @@ def arpScan():
     return piZeroHost
 
 
-def validateIPV4(address):
+def validate_IPV4(address):
     """Validate the IPV4 address"""
     try:
         socket.inet_aton(address)
@@ -44,4 +44,4 @@ def validateIPV4(address):
         print(address + "sorry the addr is not valid ip v4 address")
 
 
-arpScan()
+arp_scan()
