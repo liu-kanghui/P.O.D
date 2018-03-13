@@ -8,7 +8,7 @@
 
 
 
-##How to run the project
+## How to run the project
 on main pi, cd NewPod, run python3 app.gui.py
 
 
