@@ -3,6 +3,7 @@ import socket
 import struct
 from PIL import Image
 from datetime import datetime
+from run_remote import remote_command
 
 
 # Start a socket listening for connections on 0.0.0.0:8000 (0.0.0.0 means
@@ -15,6 +16,9 @@ server_socket.listen(0)
 connection = server_socket.accept()[0].makefile('rb')
 
 try:
+
+    remote_command('192.168.1.102',
+                   "python3 camera_client.py 30 2")
 
     while True:
 

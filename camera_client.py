@@ -2,6 +2,7 @@ import io
 import socket
 import struct
 import time
+import sys
 import picamera
 import config
 
@@ -45,11 +46,11 @@ try:
             connection.write(stream.read())
 
             # Wait until it's time for the next capture
-            time.sleep(config.camera_delay)
+            time.sleep(sys.argv[1])
 
             # PiZero loops through here until the experiment is over
             # TODO: Threads needed since PZero needs to do other things too
-            if time.time() - start > config.experiment_length:
+            if time.time() - start > sys.argv[0]:
                 break
 
             # Reset the stream for the next capture

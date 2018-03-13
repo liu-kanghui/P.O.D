@@ -23,7 +23,7 @@ def pump_water(hostIP, runTime, delayTime):
                 stdout=PIPE,
                 stderr=PIPE)
     for stdout_line in iter(ssh.stdout.readline, ""):
-            print(stdout_line)
+        print(stdout_line)
     ssh.stdout.close()
     return_code = ssh.wait()
     if return_code:

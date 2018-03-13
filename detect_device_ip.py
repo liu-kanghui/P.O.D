@@ -7,7 +7,7 @@ import config
 
 
 """This file finds connected devices' IPV4 address on the same network"""
-"""The device name must contains 'Raspberry'"""
+"""The device name must contain 'Raspberry'"""
 
 
 def arp_scan():
