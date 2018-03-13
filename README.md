@@ -7,10 +7,13 @@
    it has autocomplete and code linting.
 
 
+
 ##How to run the project
 on main pi, cd NewPod, run python3 app.gui.py
 
-# P.O.D
+
+
+## P.O.D
 self automate plant monitoring system
 
 1. main controller and mini controller must be under the same network
