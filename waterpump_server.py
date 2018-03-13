@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 from subprocess import Popen, PIPE, CalledProcessError
-
+from run_remote import remote_command
 
 '''
 This is the server side code for water pump
@@ -31,3 +31,5 @@ def pump_water(hostIP, runTime, delayTime):
 
 
 # waterPump('192.168.1.102', 2, 10)
+remote_command('192.168.1.102',
+               "python3 /home/pi/POD/waterpump_client.py 2 10")
