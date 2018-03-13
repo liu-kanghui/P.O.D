@@ -5,7 +5,9 @@ import sys
 from PyQt5.QtWidgets import QMainWindow, QApplication
 from PyQt5 import uic
 from Light import Lights
-import DetectDevice
+import detect_device_ip
+import waterpump_server
+
 
 ''' this script is the pod application'''
 
@@ -19,6 +21,7 @@ class MyApp(QMainWindow):
         self.ui.setupUi(self)
         self.ui.calc_tax_button.clicked.connect(self.CalculateTax)
         self.ui.light_button.clicked.connect(self.TurnOnLight)
+        self.ui.start_pumping_button.clicked.connect(self.TurnOnWaterPump)
 
     def CalculateTax(self):
         price = int(self.ui.price_box.toPlainText())
@@ -28,13 +31,18 @@ class MyApp(QMainWindow):
         self.ui.results_window.setText(total_price_string)
 
     def TurnOnLight(self):
-        connectedpiZeroHostDict = DetectDevice.arpScan()
+        connectedpiZeroHostDict = detect_device_ip.arp_scan()
         # assign all the pod to control light as hard on and off.
         # just for now testing.
         for name, host in connectedpiZeroHostDict.items():
             print(host)
-            lightPattern = Lights(host)
+            lightPattern = Lights('192.168.1.102')
             lightPattern.hardOnOffLED(1, 1, 120)
+
+    def TurnOnWaterPump(self):
+        run_time = (self.ui.pump_run_time.value())
+        delay_time = (self.ui.pump_delay_time.value())
+        waterpump_server.pump_water('192.168.1.102', run_time, delay_time)
 
 
 if __name__ == "__main__":
