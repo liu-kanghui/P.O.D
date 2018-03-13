@@ -7,6 +7,7 @@ from PyQt5 import uic
 from Light import Lights
 import detect_device_ip
 import waterpump_server
+from run_remote import remote_command
 
 
 ''' this script is the pod application'''
@@ -42,7 +43,10 @@ class MyApp(QMainWindow):
     def TurnOnWaterPump(self):
         run_time = (self.ui.pump_run_time.value())
         delay_time = (self.ui.pump_delay_time.value())
-        waterpump_server.pump_water('192.168.1.102', run_time, delay_time)
+        command = "python3 /home/pi/POD/waterpump_client.py " + \
+            str(run_time) + " " + str(delay_time)
+        remote_command('192.168.1.102', command)
+        #waterpump_server.pump_water('192.168.1.102', run_time, delay_time)
 
 
 if __name__ == "__main__":
