@@ -19,9 +19,13 @@ class MyApp(QMainWindow):
         super(MyApp, self).__init__()
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
-        self.ui.calc_tax_button.clicked.connect(self.CalculateTax)
-        # self.ui.light_button.clicked.connect(self.TurnOnLight)
+        # Open file
+        # openFile = QtGui.QAction("&Open File", self)
+        # self.ui.open_file_line_edit.clicke]d.connect(self.file_open)
+        # self.ui.start_lights_button.clicked.connect(self.TurnOnOffLight)
+        # self.ui.stop_lights_button.clicked.connect(self.TurnOffLight)
         self.ui.start_pumping_button.clicked.connect(self.TurnOnWaterPump)
+        # self.ui.stop_pumping_button.clicked.connect(self.TurnOffWaterPump)
 
     def CalculateTax(self):
         price = int(self.ui.price_box.toPlainText())
@@ -38,11 +42,23 @@ class MyApp(QMainWindow):
     #         print(host)
     #         lightPattern = Lights('192.168.1.102')
     #         lightPattern.hardOnOffLED(1, 1, 120)
+    #
+    # def TurnOffLight(self):
+
 
     def TurnOnWaterPump(self):
         run_time = (self.ui.pump_run_time.value())
         delay_time = (self.ui.pump_delay_time.value())
         waterpump_server.pump_water('192.168.1.102', run_time, delay_time)
+
+    def TurnOffWaterPump(self):
+        run_time = 0
+        delay_time = 0
+        waterpump_server.pump_water('192.168.1.102', run_time, delay_time)
+
+    # def file_open(self):
+    #     name = QtGui.QFileDialog.getOpenFileName(self, "Open File")
+    #     file = open(name, 'r')
 
 
 if __name__ == "__main__":
