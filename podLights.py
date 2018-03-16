@@ -37,40 +37,54 @@ class Lights():
         # arr of lux values at each of 256 levels
         self.calArr = []
         # list of pin numbers in order for GPIOut
-        self.pinOut = {18, 19, 20, 21, 22, 23, 24, 25}
-        GPIO.setmode(GPIO.BOARD)
+        self.pinOut = [18, 19, 20, 21, 22, 23, 24, 25]
+        GPIO.setmode(GPIO.BCM)
         GPIO.setup(self.pinOut, GPIO.OUT)
-
         self.active = []
+        GPIO.output(self.pinOut, GPIO.LOW)
         # do rest of GPIO setup
 
     def calibrate(self, sensor):
-        for i in range(0, 256):
+        for i in range(113, 155):
             self.lightOn(i)  # run lights at power level i
+            print(i)
+            time.sleep(1)
             lux = sensor.getReading()
+            print(lux)
+            self.calArr.append(lux)
             self.lightOff()
-            self.calArr[i] = lux
+        print(self.calArr)
 
     def lightOn(self, level):
         if level > 255 or level < 0:
             print("invalid light level")
             sys.exit(0)
-            binLevel = bin(level)  # string of form '0b101010'
-            binLevel = binLevel[2:]
-            binList = list(binLevel)
-            active = []
-            for i in range(0, 7):
-                if i < binList.length and binList[i] == '1':
-                    self.active.append(self.pinOut[i])
+        binLevel = bin(level)  # string of form '0b101010'
+        binLevel = binLevel[2:]
+        binList = list(binLevel)
+        binList.reverse()
+        active = []
+        for i in range(0, 8):
+            if i < len(binList) and binList[i] == '1':
+                self.active.append(self.pinOut[i])
 
-            GPIO.output(active, GPIO.HIGH)
+        GPIO.output(self.active, GPIO.HIGH)
+        print(binList)
 
     def lightOff(self):
         GPIO.output(self.active, GPIO.LOW)
 
 
 light = Lights()
+
+light.lightOff()
+
 ls = LightSensor()
-light.calibrate(ls)
-for i in range(0, 256):
-    print(light.calArr[i])
+# light.calibrate(ls)
+
+for i in range(103, 155):
+    light.lightOff()
+    light.lightOn(i)
+    time.sleep(1)
+
+GPIO.cleanup()

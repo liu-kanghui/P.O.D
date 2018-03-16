@@ -15,7 +15,7 @@ def pump_water(hostIP, runTime, delayTime):
             delay time after each pump '''
     HOST = hostIP
     # Ports are handled in ~/.ssh/config since we use OpenSSH
-    CMD = "python3 /home/pi/POD/waterpump_client.py"
+    CMD = "python3 /home/pi/NewPod/client/waterpump_client.py"
 
     ssh = Popen(["ssh", "%s" % HOST, CMD, str(runTime), str(delayTime)],
                 shell=False,
