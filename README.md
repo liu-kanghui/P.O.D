@@ -25,7 +25,8 @@ self automate plant monitoring system
 1. pi@raspberrypi:~$ sudo apt update
 2. pi@raspberrypi:~$ sudo apt upgrade
 3. pi@raspberrypi:~$ sudo apt install python3-gpiozero
-4. enable ssh, and GPIO remote for raspberry pi
+4. pi@raspberrypi:~$ sudo apt-get install imagemagick
+5. enable ssh, and GPIO remote for raspberry pi
 
 
 ## Environment requirement for center(pi 3):

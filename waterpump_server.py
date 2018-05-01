@@ -28,6 +28,3 @@ def pump_water(hostIP, runTime, delayTime):
     return_code = ssh.wait()
     if return_code:
         raise CalledProcessError(return_code, CMD)
-
-
-# waterPump('192.168.1.102', 2, 10)
