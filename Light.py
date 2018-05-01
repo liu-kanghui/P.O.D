@@ -24,10 +24,7 @@ class Light():
         ''' initialize the hostIP and leds GPIO pins'''
         self.hostIP = hostIP    # host is the one that controls the lights
         self.cvsFile = cvsFile
-        self.factory = PiGPIOFactory(host=hostIP)
-        # 18, 19, 20, 21, 22, 23, 24, 25 are the connected GPIO pins
-        self.leds = LEDBoard(18, 19, 20, 21, 22, 23, 24, 25,
-                             pwm=True, pin_factory=self.factory)
+
 
     def light_sensor(self):
         ''' Get the lux reading'''
