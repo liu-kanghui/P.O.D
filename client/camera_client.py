@@ -4,6 +4,17 @@ import struct
 import time
 import picamera
 
+parser = argparse.ArgumentParser()
+parser.add_argument("-start", type=int, required=True, help="experiment start time")
+parser.add_argument("-duration", type=int, required=True, help="experiment duration")
+parser.add_argument("-npics", type=int, required=True, help="pictures per day")
+
+
+exp_start = args.start
+exp_dur = args.duration
+pics_per_day = args.npics
+camera_delay = (60*60*24)/pics_per_day
+
 # Connect a client socket to my_server:8000 (change my_server to the
 # hostname of your server)
 client_socket = socket.socket()
@@ -24,22 +35,30 @@ try:
         # our protocol simple)
         start = time.time()
         stream = io.BytesIO()
-        for foo in camera.capture_continuous(stream, 'jpeg'):
-            # Write the length of the capture to the stream and flush to
-            # ensure it actually gets sent
-            connection.write(struct.pack('<L', stream.tell()))
-            connection.flush()
-            # Rewind the stream and send the image data over the wire
-            stream.seek(0)
-            connection.write(stream.read())
-            # If we've been capturing for more than 30 seconds, quit
-            if time.time() - start > 30:
-                break
-            # Reset the stream for the next capture
-            stream.seek(0)
-            stream.truncate()
-    # Write a length of zero to the stream to signal we're done
-    connection.write(struct.pack('<L', 0))
+
+        while time.time() < exp_start:
+            time.sleep(1)
+
+        cur_time = time.time() - exp_start
+        while cur_time < exp_dur
+            if cur_time % camera_delay == 0:
+                for foo in camera.capture_continuous(stream, 'jpeg'):
+                    # Write the length of the capture to the stream and flush to
+                    # ensure it actually gets sent
+                    connection.write(struct.pack('<L', stream.tell()))
+                    connection.flush()
+                    # Rewind the stream and send the image data over the wire
+                    stream.seek(0)
+                    connection.write(stream.read())
+                    # If we've been capturing for more than 30 seconds, quit
+                    if time.time() - start > 30:
+                        break
+                    # Reset the stream for the next capture
+                    stream.seek(0)
+                    stream.truncate()
+                # Write a length of zero to the stream to signal we're done
+                connection.write(struct.pack('<L', 0))
+            cur_time = time.time() - exp_start
 finally:
     connection.close()
     client_socket.close()

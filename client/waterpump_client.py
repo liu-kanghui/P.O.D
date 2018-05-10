@@ -5,27 +5,29 @@ import RPi.GPIO as GPIO
 import time
 import sys
 
+parser = argparse.ArgumentParser()
+parser.add_argument("-start", type=int, required=True, help="experiment start time")
+parser.add_argument("-duration", type=int, required=True, help="experiment duration")
+parser.add_argument("-nwater", type=int, required=True, help="pictures per day")
+parser.add_argument("-waterdur", type=int, required=True, help="duration of water")
 
-'''
-This is the client side code for water pump
-Board Pin is 11 for water pump circuit
-
-Command Line Parameter:  run time
-                         delay time
-
-'''
-
-print("water pump is running")
-
-print(sys.argv[1])
-print(sys.argv[2])
 GPIO.setmode(GPIO.BOARD)
 GPIO.setup(11, GPIO.OUT)
 
+exp_start = args.start
+exp_dur = args.duration
+water_num = args.nwater
+water_dur = sys.water_dur
+water_delay = (60*60*24)/water_num
 
-GPIO.output(11, GPIO.HIGH)
-print("water pump on")
-time.sleep(float(sys.argv[1]))
-GPIO.output(11, GPIO.LOW)
-print("water pump off")
-time.sleep(float(sys.argv[2]))
+while time.time() < exp_start:
+    time.sleep(1)
+
+cur_time = time.time() - exp_start
+while cur_time < exp_dur
+    if cur_time % water_delay == 0:
+        GPIO.output(11, GPIO.HIGH)
+        time.sleep(water_dur)
+        GPIO.output(11, GPIO.LOW)
+
+    cur_time = time.time() - exp_start
