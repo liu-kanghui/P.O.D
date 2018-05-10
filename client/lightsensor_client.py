@@ -25,7 +25,7 @@ dataMatrix = csvData.as_matrix()
 luxval, luxdur = np.split(dataMatrix, 2, axis = 1)
 
 #sum durations to get start time for each value
-luxtimes = np.cumsum(luxdur)-luxdur
+luxtimes = np.subtract(np.cumsum(luxdur.reshape(luxdur.shape[0])),luxdur.reshape(luxdur.shape[0]))
 
 exp_start = args.start
 exp_dur = args.duration
