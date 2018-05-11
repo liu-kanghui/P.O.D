@@ -33,10 +33,10 @@ def arp_scan():
         if len(eachLine) >= 2:
             macAddress = eachLine[1]   # grab the mac address
             host = eachLine[0]         # grab the host
-            if macAddress in config.piMacAddress:
+            if macAddress in piMacAddress:
                 validate_IPV4(host)     # maybe don't need to validate
                 print(macAddress)
-                piZeroHost[config.podName_mac_dict.get(macAddress)] = host
+                piZeroHost[podName_mac_dict.get(macAddress)] = host
     print("podname  and its host")
     print(piZeroHost)
     return piZeroHost
