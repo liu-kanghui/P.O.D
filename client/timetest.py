@@ -6,7 +6,7 @@ exp_dur = 10
 delay = 2
 error = 5
 
-process = Popen('python tempsensor_client.py -start {} -duration {} -delay {} -error {}'.format(start_time, exp_dur, delay, error),
+process = Popen('python lightsensor_client.py -start {} -duration {} -delay {} -error {}'.format(start_time, exp_dur, delay, error),
                 stdout=PIPE, stderr=PIPE, shell=True)
 stdout, stderr = process.communicate()
 output = stdout.decode('ascii')

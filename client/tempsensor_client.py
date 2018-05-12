@@ -36,7 +36,6 @@ while time.time() < exp_start:
 base_temp = sensor.readTempC()
 cur_time = time.time() - exp_start
 while cur_time < exp_dur:
-	print(int(cur_time) % sensor_delay)
 	if int(cur_time) % sensor_delay == 0:
 		cur_temp = sensor.readTempC()
 		print(cur_temp)
