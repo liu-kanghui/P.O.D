@@ -20,7 +20,7 @@ else:
 print(sensor_delay)
 
 sensor_error = 10
-if args.error == True:
+if args.error:
     sensor_error = args.error
 
 exp_start = args.start

@@ -29,6 +29,7 @@ try:
         # processing on it
         image_stream.seek(0)
         image = Image.open(image_stream)
+        print(connection.getpeername())
         name = '%s.jpg' % (str(datetime.now()))
         # outfile = '%s/%s.jpg' % (self.tgtdir,
         # self.basename + str(datetime.now()))

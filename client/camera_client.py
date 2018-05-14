@@ -3,17 +3,18 @@ import socket
 import struct
 import time
 import picamera
+import argparse
 
 parser = argparse.ArgumentParser()
-parser.add_argument("-start", type=int, required=True, help="experiment start time")
+parser.add_argument("-start", type=float, required=True, help="experiment start time")
 parser.add_argument("-duration", type=int, required=True, help="experiment duration")
-parser.add_argument("-npics", type=int, required=True, help="pictures per day")
+parser.add_argument("-picdelay", type=int, required=True, help="pictures per day")
 
+args = parser.parse_args()
 
 exp_start = args.start
 exp_dur = args.duration
-pics_per_day = args.npics
-camera_delay = (60*60*24)/pics_per_day
+camera_delay = args.picdelay
 
 # Connect a client socket to my_server:8000 (change my_server to the
 # hostname of your server)
@@ -26,8 +27,8 @@ try:
     with picamera.PiCamera() as camera:
         camera.resolution = (640, 480)
         # Start a preview and let the camera warm up for 2 seconds
-        camera.start_preview()
-        time.sleep(5)
+        #camera.start_preview()
+        #time.sleep(2)
 
         # Note the start time and construct a stream to hold image data
         # temporarily (we could write it directly to connection but in this
@@ -40,8 +41,8 @@ try:
             time.sleep(1)
 
         cur_time = time.time() - exp_start
-        while cur_time < exp_dur
-            if cur_time % camera_delay == 0:
+        while int(cur_time) < exp_dur:
+            if int(cur_time) % camera_delay == 0:
                 for foo in camera.capture_continuous(stream, 'jpeg'):
                     # Write the length of the capture to the stream and flush to
                     # ensure it actually gets sent
