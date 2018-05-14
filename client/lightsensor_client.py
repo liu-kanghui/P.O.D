@@ -15,11 +15,14 @@ parser.add_argument("-delay", type=int, required=False, help="delay between lux 
 parser.add_argument("-error", type=int, required=False, help="allowable error in lux")
 args = parser.parse_args()
 
+exp_start = args.start #0 if starting immediately
+exp_dur = args.duration
+
 sensor_delay = 300 #sense every 5 minutes by default
 if args.delay:
     sensor_delay = args.delay
 
-sensor_error = 1000
+sensor_error = 1000 #allowable error in lux
 if args.error:
     sensor_error = args.error
 
@@ -27,17 +30,18 @@ if args.error:
 csvData = pd.read_csv(args.csv)
 dataMatrix = csvData.as_matrix()
 luxval, luxdur = np.split(dataMatrix, 2, axis = 1)
-
 #sum durations to get start time for each value
 luxtimes = np.subtract(np.cumsum(luxdur.reshape(luxdur.shape[0])),luxdur.reshape(luxdur.shape[0]))
 
-exp_start = args.start
-exp_dur = args.duration
 
 sensor = tsl2591.Tsl2591()
 
-while time.time() < exp_start:
-    time.sleep(1)
+#wait for experiment to start
+if exp_start == 0:
+    exp_start - time.time()
+else:
+    while time.time() < exp_start:
+        time.sleep(1)
 
 arr_ind = 0
 cur_time = time.time() - exp_start

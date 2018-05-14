@@ -23,8 +23,12 @@ water_delay = args.waterdel
 water_dur = args.waterdur
 #water_delay = (60*60*24)/water_num
 
-while time.time() < exp_start:
-    time.sleep(1)
+#wait for experiment to start
+if exp_start == 0:
+    exp_start - time.time()
+else:
+    while time.time() < exp_start:
+        time.sleep(1)
 
 cur_time = time.time() - exp_start
 while int(cur_time) < exp_dur:

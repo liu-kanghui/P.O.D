@@ -29,10 +29,13 @@ exp_dur = args.duration
 sensor = tempLib.MCP9808()
 sensor.begin()
 
-while time.time() < exp_start:
-    time.sleep(1)
-    print("waiting...")
-
+#wait for experiment to start
+if exp_start == 0:
+    exp_start - time.time()
+else:
+    while time.time() < exp_start:
+        time.sleep(1)
+        
 base_temp = sensor.readTempC()
 cur_time = time.time() - exp_start
 while cur_time < exp_dur:
