@@ -54,8 +54,8 @@ while cur_time < exp_dur:
         lux = sensor.calculate_lux(full, ir)
         print(lux)
     time.sleep(1)
-        if abs(luxval[arr_ind]-lux) > sensor_error:
-            #TODO:Make error message/export to file
-            print("Light value out of range")
+    if abs(luxval[arr_ind]-lux) > sensor_error:
+        #TODO:Make error message/export to file
+        print("Light value out of range")
 
     cur_time = time.time() - exp_start

@@ -11,7 +11,7 @@ parser.add_argument("-duration", type=int, required=True, help="experiment durat
 parser.add_argument("-picdelay", type=int, required=True, help="pictures per day")
 
 args = parser.parse_args()
-
+print("camera args: ",args)
 exp_start = args.start
 exp_dur = args.duration
 camera_delay = args.picdelay
@@ -29,22 +29,21 @@ try:
 
         camera.resolution = (640, 480)
         camera.start_preview()
-        time.sleep(2)
 
         # Note the start time and construct a stream to hold image data
         # temporarily (we could write it directly to connection but in this
         # case we want to find out the size of each capture first to keep
         # our protocol simple)
-        start = time.time()
         stream = io.BytesIO()
 
         while time.time() < exp_start:
+            print('sleeping')
             time.sleep(1)
 
         cur_time = time.time() - exp_start
+        print(exp_dur - int(cur_time))
         while int(cur_time) < exp_dur:
-
-            # if int(cur_time) % camera_delay == 0:
+            #if int(cur_time) % camera_delay == 0:
 
             camera.capture(stream, 'jpeg')
 
@@ -62,12 +61,13 @@ try:
             stream.truncate()
 
             # Write a length of zero to the stream to signal we're done
-            # connection.write(struct.pack('<L', 0))
+            
 
             time.sleep(camera_delay)
 
             cur_time = time.time() - exp_start
 
 finally:
+    connection.write(struct.pack('<L', 0))
     connection.close()
     client_socket.close()

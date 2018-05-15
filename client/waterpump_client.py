@@ -21,18 +21,20 @@ exp_start = args.start
 exp_dur = args.duration
 water_delay = args.waterdel
 water_dur = args.waterdur
+
+print("water args: ",args)
 #water_delay = (60*60*24)/water_num
 
 #wait for experiment to start
-if exp_start == 0:
-    exp_start - time.time()
-else:
-    while time.time() < exp_start:
-        time.sleep(1)
 
+while time.time() < exp_start:
+    time.sleep(1)
+
+print("poop")
 cur_time = time.time() - exp_start
 while int(cur_time) < exp_dur:
     if int(cur_time) % water_delay == 0:
+    	print("watering")
         GPIO.output(11, GPIO.HIGH)
         time.sleep(water_dur)
         GPIO.output(11, GPIO.LOW)

@@ -17,8 +17,6 @@ if args.delay:
 else:
 	sensor_delay = 300 #sense every 5 minutes by default
 
-print(sensor_delay)
-
 sensor_error = 10
 if args.error:
     sensor_error = args.error
@@ -47,4 +45,3 @@ while cur_time < exp_dur:
 			print("Temp value out of range")
 	time.sleep(1)
 	cur_time = time.time() - exp_start
-	print(int(cur_time))

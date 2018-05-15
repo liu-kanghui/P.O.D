@@ -1,86 +1,70 @@
-#!/usr/bin/python
-# -*- coding: utf-8 -*-
-from gpiozero import LEDBoard
-import tsl2591
-from time import sleep
+import numpy as np
+import pandas as pd
+import time
+import sys
+import argparse
+from subprocess import Popen, PIPE
+from Light import Light
+
+parser = argparse.ArgumentParser()
+parser.add_argument("-csv", type=str, required=True, help="csv filename")
+parser.add_argument("-start", type=float, required=True, help="experiment start time")
+parser.add_argument("-duration", type=int, required=True, help="experiment duration")
+args = parser.parse_args()
+
+csv_path = args.csv
+exp_start = args.start
+exp_dur = args.duration
 
 
-def floatToBinary(n):
-        val_arr = [128.0,64.0,32.0,16.0,8.0,4.0,2.0,1.0]
-        ans_arr = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-        rem = n
-        ans_arr[7] = round(rem % 1.0,1) #gets decimal
-        rem = rem - ans_arr[7]#get rid of decimal
+#parse csv
+csvData = pd.read_csv(csv_path)
+dataMatrix = csvData.as_matrix()
+luxval, luxdur = np.split(dataMatrix, 2, axis = 1)
+luxval = luxval.reshape(luxval.shape[0])
 
-        for i in range(7):
-            if rem > val_arr[i]:
-                ans_arr[i] = 1.0
-                rem -= val_arr[i]
-            elif rem != 0.0:
-                ans_arr[i] = round(rem/float(val_arr[i]),3)
-                rem = 0.0
-        return ans_arr[::-1]#reverse
-        #return ans_arr
-
-class Light():
-
-    def __init__(self):
-        ''' initialize the hostIP and leds GPIO pins'''
-
-        # 18, 19, 20, 21, 22, 23, 24, 25 are the connected GPIO pins
-
-        self.leds = LEDBoard(18,19,20,21,22,23,24,25, pwm=False)
-        self.sensor = tsl2591.Tsl2591()
-
-    
+#sum durations to get start time for each value
+luxtimes = np.subtract(np.cumsum(luxdur.reshape(luxdur.shape[0])),luxdur.reshape(luxdur.shape[0]))
 
 
-    def calibrate_light(self):
-        ''' Return a dictionary of lux and array value for GPIO Pins'''
+#calibrate lights
+L = Light()
+lux_dict = L.lux_dictionary
 
-        self.leds.on()
-        lux_dictionary = dict()
-        start_level = 100
-        end_level = 250
-        interval = 1
+#start light loop
+loop_time = luxtimes[len(luxtimes)-1] + luxdur[len(luxdur)-1] #length of light pattern
 
-        for i in range(start_level, end_level, interval):
+while time.time() < exp_start:
+    time.sleep(.1)
 
-            self.leds.value = tuple(bin(int(i))[::-1])
-            lux_dictionary[lux] = tuple(bin(int(i))[::-1])
+cur_time = time.time() - exp_start
+i = 0
+time_elapsed = True
+last_changed = time.time() + 10
+while cur_time < exp_dur:
+	#increment to next light value if enough time has elapsed
+	if time.time() - last_changed >= luxdur[i]:
+		time_elapsed = True
+		if i >= len(luxtimes) - 1:
+			i = 0
+		else:
+			i += 1
 
-        # self.leds.on()
-        # lux_dictionary = dict()
-        # start_level = 100.0
-        # end_level = 250.0
-        # interval = 1.0
-        # for i in range(int(start_level*10), int(end_level*10), int(interval*10)):
-            
-        #     self.leds.value = tuple(floatToBinary(float(i)/10.0))
-        #     #print(floatToBinary(float(i)/10.0))
-        
-        #     sleep(.5)
-        #     (full1, ir1) = self.sensor.get_full_luminosity()
-        #     (full2, ir2) = self.sensor.get_full_luminosity()
-        #     (full3, ir3) = self.sensor.get_full_luminosity()
-        #     full4 = (full1+full2+full3)/3
-        #     ir4 = (ir1+ir2+ir3)/3
-        #     lux = int(self.sensor.calculate_lux(full4, ir4))
-        #     if lux not in lux_dictionary:
-                
-        #         lux_dictionary[lux] = floatToBinary(float(i)/10.0)
-        #         print 'lux {} \xef\xbc\x9a {}'.format(lux,
-        #                 lux_dictionary[lux])
-        #     else:
-        #         print 'lux value already exist'
+	#double check:
+	#1st check if it is right time to change
+	#2nd check if light has been on long enough at last power level
+	if cur_time % loop_time >= luxtimes[i] and time_elapsed==True:#time to change light level
+		
+		last_changed = time.time()
+		time_elapsed = False
 
-        return lux_dictionary
-
-    def run_test(self):
-        start_level = 150.0
-        end_level = 170.0
-        interval = 0.5
-        for i in range(int(start_level*10), int(end_level*10), int(interval*10)):
-            print(floatToBinary(float(i)/10.0))
-            self.leds.value = tuple(floatToBinary(float(i)/10.0))
-            sleep(.5)
+		#if in dict, use that. else find closest match
+		if luxval[i] in lux_dict:
+			L.leds.value = lux_dict[luxval[i]]
+			print(lux_dict[luxval[i]])
+		else:
+			L.leds.value = lux_dict.get(luxval[i], lux_dict[min(lux_dict.keys(), key=lambda k: abs(k-luxval[i]))])
+			print(luxval[i], lux_dict.get(luxval[i], lux_dict[min(lux_dict.keys(), key=lambda k: abs(k-luxval[i]))]))
+		#inc i
+		
+	cur_time = time.time() - exp_start
