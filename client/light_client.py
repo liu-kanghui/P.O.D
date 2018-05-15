@@ -20,6 +20,7 @@ def floatToBinary(n):
                 ans_arr[i] = round(rem/float(val_arr[i]),3)
                 rem = 0.0
         return ans_arr[::-1]#reverse
+        #return ans_arr
 
 class Light():
 
@@ -39,26 +40,39 @@ class Light():
 
         self.leds.on()
         lux_dictionary = dict()
-        start_level = 150.0
-        end_level = 250.0
-        interval = 0.4
-        for i in range(int(start_level*10), int(end_level*10), int(interval*10)):
-            self.leds.value = tuple(floatToBinary(float(i)/10.0))
-            print(floatToBinary(float(i)/10.0))
+        start_level = 100
+        end_level = 250
+        interval = 1
+
+        for i in range(start_level, end_level, interval):
+
+            self.leds.value = tuple(bin(int(i))[::-1])
+            lux_dictionary[lux] = tuple(bin(int(i))[::-1])
+
+        # self.leds.on()
+        # lux_dictionary = dict()
+        # start_level = 100.0
+        # end_level = 250.0
+        # interval = 1.0
+        # for i in range(int(start_level*10), int(end_level*10), int(interval*10)):
+            
+        #     self.leds.value = tuple(floatToBinary(float(i)/10.0))
+        #     #print(floatToBinary(float(i)/10.0))
         
-            sleep(.5)
-            (full1, ir1) = self.sensor.get_full_luminosity()
-            (full2, ir2) = self.sensor.get_full_luminosity()
-            (full3, ir3) = self.sensor.get_full_luminosity()
-            full4 = (full1+full2+full3)/3
-            ir4 = (ir1+ir2+ir3)/3
-            lux = int(self.sensor.calculate_lux(full4, ir4))
-            if lux not in lux_dictionary:
-                lux_dictionary[lux] = floatToBinary(float(i)/10.0)
-                print 'lux {} \xef\xbc\x9a {}'.format(lux,
-                        lux_dictionary[lux])
-            else:
-                print 'lux value already exist'
+        #     sleep(.5)
+        #     (full1, ir1) = self.sensor.get_full_luminosity()
+        #     (full2, ir2) = self.sensor.get_full_luminosity()
+        #     (full3, ir3) = self.sensor.get_full_luminosity()
+        #     full4 = (full1+full2+full3)/3
+        #     ir4 = (ir1+ir2+ir3)/3
+        #     lux = int(self.sensor.calculate_lux(full4, ir4))
+        #     if lux not in lux_dictionary:
+                
+        #         lux_dictionary[lux] = floatToBinary(float(i)/10.0)
+        #         print 'lux {} \xef\xbc\x9a {}'.format(lux,
+        #                 lux_dictionary[lux])
+        #     else:
+        #         print 'lux value already exist'
 
         return lux_dictionary
 
@@ -70,9 +84,3 @@ class Light():
             print(floatToBinary(float(i)/10.0))
             self.leds.value = tuple(floatToBinary(float(i)/10.0))
             sleep(.5)
-
-
-        
-L = Light()
-#L.calibrate_light()
-L.run_test()
