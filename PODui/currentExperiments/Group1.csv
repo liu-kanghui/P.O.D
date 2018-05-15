@@ -1,0 +1,10 @@
+exp_start 1526353200
+exp_duration 10800
+csv_filename csvFileEx.csv
+water_delay 05
+water_duration 03
+lightsensor_delay 2
+lightsensor_error 100
+tempsensor_delay 7
+tempsensor_error 60
+picture_delay 12
