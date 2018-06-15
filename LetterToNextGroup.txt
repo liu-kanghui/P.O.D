@@ -1,0 +1,117 @@
+Dear whomever ends up finishing this project,
+
+My name is Quinn Murphy, and I was one of the previous POD team members. Now,
+you may be wondering "what is this mess of wires and sensors that you left us with?".
+In this document I will attempt to explain how everything works at a high-ish level
+and also elaborate on what needs to be accomplished going forward. Here we go...
+
+Inspiration:
+This project was conceived by Ben Miner in the Biology department (as you probably know),
+and was originally intended to monitor the growth of a specific type of weed (arabidopsis)
+under varying light conditions. The idea is to automate the tedious processes of experimenting
+on plants (water, pictures to capture growth, keeping consistent temp, etc.) while also
+subjecting the plant to specifically designed light patterns to test their effects on its growth.
+
+Main Control Unit:
+The main computer that houses the UI is a Raspberry Pi model 3. All of the experiment data
+is sent back to this computer for later analysis by the experimenter, and the experiment configurations
+are controlled from here.
+
+Control Unit for Individual PODs:
+The control unit for each POD is a Raspberry Pi model Zero W. The lights, sensors, water pump, and camera
+are all attached to and controlled by this.
+
+Lights:
+This is perhaps the most important aspect of this device, and the functionality that
+we had the most trouble with. The lights are connected to 8 GPIO pins on the Pi that
+are then run through a specialized circuit. Aran Clauson can tell you more about this
+circuit than I can, but it works like this: think of the 8 pins as an 8-digit binary number.
+Flipping the first one on lets through 1/255 of the potential power, the second one 2/255,
+the third one 4/255, etc. This way, we can specify exactly how much power is going through
+the lights at any given time, giving us very fine-grained control over the intensity.
+
+At the beginning of an experiment, the lights go through a calibration step, where each
+of these 255 power levels are mapped to a "lux" value (lumens/m^2). After this, we can
+match as closely as possible the desired lux value specified in the supplied CSV file
+for each experiment. This brings me into the sensors...
+
+Sensors:
+The light sensor is a TSL2591 light sensor specifically designed to work with the
+raspberry Pi. It measures light intensity in lux, which is equivalent to lumens/m^2.
+Our initial intension was to try and get the lights to output 30,000 lux, which is on
+the lower end of what natural sunlight outputs. However, later on we realized that
+measuring the lux of LEDs is unreliable due to the different intensity of different colors
+of LEDs. Also, there is no direct conversion from LED lux intensity to sunlight, so the
+best you can do is guess. However, the brightness we have currently achieved (around 15000 lux)
+is more than enough for any plant-growth experiment (we only used 400 lux for our final demo
+in 493 and the plant grew very quickly). We use the sensor for initial calibration as well as
+taking periodic readings to ensure that the lights are outputting the correct intensity (within
+a tolerable range of error).
+
+The Temperature sensor (MCP9808) is only used to periodically take temperature readings
+throughout the experiment, ensuring that no outside stimuli is bringing the temperature
+outside of the acceptable range. There is no actual temperature-control mechanism in the POD.
+
+Camera:
+The camera we use is a standard raspberry pi camera, and focuses very close. As it is, we have
+the camera taped to the inside of the POD, but towards the end of the quarter we received a Camera
+mount which should be with the rest of the supplies. The camera takes pictures at a certain interval
+so that they can be stored in the main Pi and turned into a timelapse video.
+
+Water Pump:
+This is really the simplest part of the whole device. It is just run off of one GPIO pin and runs for a
+given number of seconds at a given interval. It consistently pumps around 6 ml/sec of water.
+
+Structure of the Code:
+It all starts with someone configuring the experiment as shown in the documentation. The main control unit then
+sends the configuration data files (csv file for light pattern, txt file for other configurations) to the POD. It then calls
+a few commands over ssh, one for each of the devices. These calls execute client code on the POD's controller. Each
+component runs it's own python script which is just a while loop for the duration of the experiment. This should all be
+fairly obvious when you read through the code.
+
+Future work (what we didn't finish):
+    - Obviously, the final goal for this project is to produce a bunch of PODs and run a legit experiment.
+    The farthest we got is to complete one basically-complete prototype and demonstrate that a plant will in
+    fact grow in there.
+
+    - Installing the camera mount and determining an ideal camera angle (plant grew out of frame in our experiment).
+    However, the camera is a wide-angle lense so it should capture most of the plant regardless of where you put it.
+    Another option is to have the mount be movable so that the researcher can chose his/her own angle.
+
+    - In a similar vein, the clip that secures the camera's ribbon cable into the small Pi broke a few weeks before the
+    end of spring quarter, so the camera cannot be connected to the right port anymore. You should also look into purchasing
+    a longer ribbon cable (the kind with the smaller end) so that length does not hinder where you can place the Camera
+
+    - Making an enclosure for the cluster of wires and devices so that it looks better and breaks less often would be great.
+
+    - Making the water pump more securely attached to the outside of the POD. Currently, we have a large zip tie and some tape
+    holding it on, but that doesn't work very well.
+
+    - Perhaps installing some kind of drip system for watering the plant. Currently, it's just a tube that  empties into the plant
+    tray, but this does not evenly distribute the water
+
+    - The sensors currently take readings at the specified interval, but these readings are not stored anywhere and are not sent to
+    the main Pi after the experiment. This should be fairly easy to implement, just store the readings in a .txt file and scp it to the
+    main pod with an easily-identifiable filename based on the experiment and which POD it came from. I may implement this before I graduate
+    (because I'm that nice), but we'll see
+
+    - The pictures are all currently stored in a single folder called 'photos' and are not actually post-processed into a timelapse automatically.
+    You should make the photos all go into separate folders, separated by experiment and POD, and then make all of those timelapses.This is a pretty
+    simple fix (like 2 lines of code to make a timelapse). Again, I may implement this myself if I have time.
+
+    - There is currently no way to identify which PODs are available on the network from the UI, the IP address of the one we have working is just hard-coded
+    into the UI code somewhere. You may have to implement this, or you could just hard-code all of the PODs' MAC addresses into the code as you make them,
+    and use those to get the IP addresses (or make static IP addresses and hard-code those, your choice).
+
+Things to look into if you're feeling ambitious:
+    - Experimenting with different colors of LEDs (there are lids with various configurations already made)
+
+    - Installing a moisture sensor so that the plant can be automatically watered when the soil is dry
+
+    - Installing a different kind of light sensor that is better for measuring LED brightness
+
+Besides all of that, I'm sure there are plenty of bugs to fix that we haven't found, but the prototype is pretty solid as far as basic functionality.
+If I have any one piece of advice to give you, it is to set your goals high, because you may not accomplish even half of what you originally set out to.
+Let me know if you have any questions, if I'm not too busy I'll answer them as best I can. My email is quinn1652@gmail.com and my phone number is 206-920-0394.
+
+Good Luck!!!
