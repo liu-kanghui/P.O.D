@@ -1,3 +1,8 @@
+#Quinn Murphy, Kanghui Liu, Jesse Kline, Emily Wright
+#Plant Observation Device
+#Water Pump Loop (client)
+
+
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
@@ -30,11 +35,9 @@ print("water args: ",args)
 while time.time() < exp_start:
     time.sleep(1)
 
-print("poop")
 cur_time = time.time() - exp_start
 while int(cur_time) < exp_dur:
     if int(cur_time) % water_delay == 0:
-    	print("watering")
         GPIO.output(11, GPIO.HIGH)
         time.sleep(water_dur)
         GPIO.output(11, GPIO.LOW)

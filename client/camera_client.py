@@ -1,3 +1,7 @@
+#Quinn Murphy, Kanghui Liu, Jesse Kline, Emily Wright
+#Plant Observation Device
+#Camera Loop (client)
+
 import io
 import socket
 import struct
@@ -12,7 +16,8 @@ parser.add_argument("-picdelay", type=int, required=True, help="pictures per day
 
 args = parser.parse_args()
 print("camera args: ",args)
-exp_start = args.start
+#exp_start = args.start
+exp_start = time.time()
 exp_dur = args.duration
 camera_delay = args.picdelay
 
@@ -37,35 +42,35 @@ try:
         stream = io.BytesIO()
 
         while time.time() < exp_start:
-            print('sleeping')
             time.sleep(1)
 
         cur_time = time.time() - exp_start
         print(exp_dur - int(cur_time))
         while int(cur_time) < exp_dur:
-            #if int(cur_time) % camera_delay == 0:
+            if int(cur_time) % camera_delay == 0:
 
-            camera.capture(stream, 'jpeg')
+                camera.capture(stream, 'jpeg')
 
-            # Write the length of the capture to the stream and flush to
-            # ensure it actually gets sent
-            connection.write(struct.pack('<L', stream.tell()))
-            connection.flush()
+                # Write the length of the capture to the stream and flush to
+                # ensure it actually gets sent
+                connection.write(struct.pack('<L', stream.tell()))
+                connection.flush()
 
-            # Rewind the stream and send the image data over the wire
-            stream.seek(0)
-            connection.write(stream.read())
+                # Rewind the stream and send the image data over the wire
+                stream.seek(0)
+                connection.write(stream.read())
 
-            # Reset the the stream for the next capture
-            stream.seek(0)
-            stream.truncate()
+                # Reset the the stream for the next capture
+                stream.seek(0)
+                stream.truncate()
 
-            # Write a length of zero to the stream to signal we're done
-            
+                # Write a length of zero to the stream to signal we're done
+                
 
-            time.sleep(camera_delay)
-
+                #time.sleep(camera_delay)
+            time.sleep(1)
             cur_time = time.time() - exp_start
+        camera.close()
 
 finally:
     connection.write(struct.pack('<L', 0))

@@ -1,3 +1,8 @@
+#Quinn Murphy, Kanghui Liu, Jesse Kline, Emily Wright
+#Plant Observation Device
+#Temperature Sensor Loop (client)
+
+
 import RPi.GPIO as GPIO
 import time
 import Adafruit_MCP9808.MCP9808 as tempLib

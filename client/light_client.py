@@ -1,3 +1,8 @@
+#Quinn Murphy, Kanghui Liu, Jesse Kline, Emily Wright
+#Plant Observation Device
+#Light Loop (client)
+
+
 import numpy as np
 import pandas as pd
 import time
@@ -13,7 +18,7 @@ parser.add_argument("-duration", type=int, required=True, help="experiment durat
 args = parser.parse_args()
 
 csv_path = args.csv
-exp_start = args.start
+exp_start = time.time()
 exp_dur = args.duration
 
 

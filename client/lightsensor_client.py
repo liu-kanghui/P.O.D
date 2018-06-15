@@ -1,3 +1,8 @@
+#Quinn Murphy, Kanghui Liu, Jesse Kline, Emily Wright
+#Plant Observation Device
+#Light Sensor Loop (client)
+
+
 #!/bin/env python3
 
 import tsl2591
